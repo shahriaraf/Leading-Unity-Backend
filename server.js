@@ -1,10 +1,9 @@
 const express = require('express');
-const cors = require('cors');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
-// Routes
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const courseRoutes = require('./routes/courseRoutes');
@@ -23,17 +22,16 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-// Mount routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/proposals', proposalRoutes);
 
-// Error middleware
 app.use(notFound);
 app.use(errorHandler);
 
-// No app.listen()
-// Export for Vercel serverless
+// ❗ IMPORTANT: DO NOT use app.listen()
+// Vercel will handle the server automatically
+
 module.exports = app;
