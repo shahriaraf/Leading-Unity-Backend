@@ -6,6 +6,10 @@ const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['student', 'supervisor', 'admin'], required: true },
+  // 🟢 ADD THESE FIELDS
+  studentId: { type: String }, 
+  batch: { type: String },
+  section: { type: String },
 }, { timestamps: true });
 
 userSchema.methods.matchPassword = async function(enteredPassword) {
