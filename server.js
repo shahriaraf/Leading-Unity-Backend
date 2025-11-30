@@ -17,21 +17,21 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://leading-unity-admin-panal.vercel.app",  // replace with real domain
+  "https://leading-unity-admin-panal.vercel.app", // your frontend
 ];
+
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps, curl, postman)
     if (!origin) return callback(null, true);
-
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error("CORS blocked: " + origin));
     }
   },
   credentials: true,
 }));
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
