@@ -15,21 +15,10 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://leading-unity-admin-panal.vercel.app", // your frontend
-];
-
+// Allow requests from any origin
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS blocked: " + origin));
-    }
-  },
-  credentials: true,
+  origin: '*', // ✅ Allow all origins
+  credentials: true, // optional, needed only if sending cookies or auth headers
 }));
 
 app.use(express.json());
