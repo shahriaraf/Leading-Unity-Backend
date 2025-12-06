@@ -3,7 +3,7 @@ const { createSupervisor, getAllUsers, deleteUser } = require('../controllers/us
 const { protect, admin } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.route('/').get(protect, admin, getAllUsers);
+router.route('/').get(protect, getAllUsers);
 router.route('/supervisor').post(protect, createSupervisor);
 router.route('/:id').delete(protect, admin, deleteUser);
 
