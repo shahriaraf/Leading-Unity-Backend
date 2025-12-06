@@ -1,19 +1,37 @@
 const mongoose = require('mongoose');
 
 const proposalSchema = mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
+  title: { type: String, required: true },
+  description: { type: String, required: true }, // This stores the Drive Link
+  
+  // The student who submitted the proposal (Leader)
+  student: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    required: true, 
+    ref: 'User' 
   },
-  description: {
-    type: String,
-    required: true,
+  
+  supervisor: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    required: true, 
+    ref: 'User' 
   },
-  student: {
-    type: mongoose.Schema.Types.ObjectId, // This links the proposal to a user
-    required: true,
-    ref: 'User', // The 'ref' tells Mongoose which model to link to
+  
+  course: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    required: true, 
+    ref: 'Course' 
   },
+
+  // 🟢 NEW: Array to store team member details
+  teamMembers: [{
+    name: String,
+    studentId: String,
+    cgpa: String,
+    email: String,
+    mobile: String
+  }],
+
   status: {
     type: String,
     required: true,
