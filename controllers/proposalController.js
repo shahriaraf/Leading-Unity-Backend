@@ -27,4 +27,41 @@ const createProposal = async (req, res) => {
   }
 };
 
-module.exports = { createProposal };
+
+
+const getAllProposals = async (req, res) => {
+  try {
+    const proposals = await Proposal.find({})
+      .populate('student', 'name studentId email') // Get Leader details
+      .populate('supervisor', 'name email')        // Get Supervisor details
+      .populate('course', 'courseCode courseTitle') // Get Course details
+      .sort({ createdAt: -1 }); // Newest first
+
+    res.json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+
+
+const updateProposalStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+        const proposal = await Proposal.findById(req.params.id);
+
+        if (proposal) {
+            proposal.status = status;
+            const updatedProposal = await proposal.save();
+            res.json(updatedProposal);
+        } else {
+            res.status(404).json({ message: 'Proposal not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+
+module.exports = { createProposal, getAllProposals, updateProposalStatus };
