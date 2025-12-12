@@ -11,11 +11,10 @@ const proposalSchema = mongoose.Schema({
     ref: 'User' 
   },
   
-  supervisor: { 
+ supervisors: [{ 
     type: mongoose.Schema.Types.ObjectId, 
-    required: true, 
     ref: 'User' 
-  },
+  }],
   
   course: { 
     type: mongoose.Schema.Types.ObjectId, 

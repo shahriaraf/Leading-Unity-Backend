@@ -3,9 +3,9 @@ const Proposal = require('../models/proposalModel');
 const createProposal = async (req, res) => {
   try {
     // 🟢 Extract teamMembers from body
-    const { title, description, supervisorId, courseId, teamMembers } = req.body;
+    const { title, description, supervisorIds, courseId, teamMembers } = req.body;
 
-    if (!title || !description || !supervisorId || !courseId) {
+    if (!title || !description || !supervisorIds || !courseId) {
       return res.status(400).json({ message: 'Please provide title, link, supervisor, and course.' });
     }
 
@@ -13,7 +13,7 @@ const createProposal = async (req, res) => {
       title,
       description,
       student: req.user._id,
-      supervisor: supervisorId,
+      supervisor: supervisorIds,
       course: courseId,
       // 🟢 Save the team members array (default to empty list if none provided)
       teamMembers: teamMembers || [] 
@@ -33,7 +33,7 @@ const getAllProposals = async (req, res) => {
   try {
     const proposals = await Proposal.find({})
       .populate('student', 'name studentId email') // Get Leader details
-      .populate('supervisor', 'name email')        // Get Supervisor details
+      .populate('supervisors', 'name email') // 🟢 Populate the array, not single field       // Get Supervisor details
       .populate('course', 'courseCode courseTitle') // Get Course details
       .sort({ createdAt: -1 }); // Newest first
 
