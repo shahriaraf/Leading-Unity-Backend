@@ -13,7 +13,7 @@ const createProposal = async (req, res) => {
       title,
       description,
       student: req.user._id,
-      supervisor: supervisorIds,
+      supervisors: supervisorIds,
       course: courseId,
       // 🟢 Save the team members array (default to empty list if none provided)
       teamMembers: teamMembers || [] 
