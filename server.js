@@ -36,7 +36,12 @@ app.use('/api/proposals', proposalRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// ❗ IMPORTANT: DO NOT use app.listen()
-// Vercel will handle the server automatically
+// ✅ UPDATED: Works on Vercel AND Localhost
+// if (require.main === module) {
+//   const PORT = process.env.PORT || 5000;
+//   app.listen(PORT, () => {
+//     console.log(`Server running locally on port ${PORT}`);
+//   });
+// }
 
 module.exports = app;

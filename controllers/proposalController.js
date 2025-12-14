@@ -9,6 +9,41 @@ const createProposal = async (req, res) => {
       return res.status(400).json({ message: 'Please provide title, link, supervisor, and course.' });
     }
 
+    const leaderStudentId = req.user.studentId; 
+    const memberStudentIds = teamMembers ? teamMembers.map(m => m.studentId) : [];
+    const allInvolvedStudentIds = [leaderStudentId, ...memberStudentIds];
+
+    const uniqueIdsToCheck = [...new Set(allInvolvedStudentIds.filter(id => id))];
+
+      const existingMemberConflict = await Proposal.findOne({
+      'teamMembers.studentId': { $in: uniqueIdsToCheck },
+      status: { $ne: 'rejected' } // Only check pending or approved proposals
+    });
+
+    if (existingMemberConflict) {
+      return res.status(400).json({ 
+        message: 'One or more students are already members of another team.' 
+      });
+    }
+
+    // 🟢 STEP 3: Check if ANY of these students are already a 'Leader' (student field)
+    // The 'student' field in Proposal is an ObjectId, but our list is Strings.
+    // We must find the User ObjectIds for these Student IDs first.
+    const users = await User.find({ studentId: { $in: uniqueIdsToCheck } });
+    const userObjectIds = users.map(user => user._id);
+
+    const existingLeaderConflict = await Proposal.findOne({
+      student: { $in: userObjectIds },
+      status: { $ne: 'rejected' }
+    });
+
+    if (existingLeaderConflict) {
+      return res.status(400).json({ 
+        message: 'One or more students (or the leader) are already leading another team.' 
+      });
+    }
+
+
     const proposal = new Proposal({
       title,
       description,

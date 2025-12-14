@@ -34,8 +34,8 @@ const proposalSchema = mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'pending',
+    enum: ['approved', 'rejected'],
+    default: 'approved',
   },
 }, { timestamps: true });
 
